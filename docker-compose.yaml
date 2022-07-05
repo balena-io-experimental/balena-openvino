@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  #openvino-model-server:
+  #  image: 
+  #  network_mode: host
+
+
+
+  video-capture:
+    build: capture
+    network_mode: host
+    privileged: true
+    labels:
+          io.balena.features.balena-api: '1'
+
+  video-streaming:
+    build: streaming
+    network_mode: host
+    labels:
+      io.balena.features.supervisor-api: '1'
+
+  #app:
+
+
+
+    
