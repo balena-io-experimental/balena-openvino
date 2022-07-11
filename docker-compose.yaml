@@ -1,26 +1,41 @@
 version: '2'
 
 services:
-  #openvino-model-server:
-  #  image: 
-  #  network_mode: host
 
+ # app:
+ #   build: app
+ #   network_mode: host
+ #   ports:
+ #     - 9000:9000
+
+  model-server:
+    image: openvino/model_server:latest
+    network_mode: host
+    environment:
+      - model_name="resnet"
+      - model_path="gs://ovms-public-eu/resnet50-binary"
+      - layout="NHWC:NCHW"
+      - port=9000
+      - rest_port=8000
+    ports:
+      - 9000:9000
 
 
   video-capture:
-    build: capture
+    build: video-capture
     network_mode: host
     privileged: true
     labels:
           io.balena.features.balena-api: '1'
 
   video-streaming:
-    build: streaming
+    build: video-streaming
     network_mode: host
     labels:
       io.balena.features.supervisor-api: '1'
 
-  #app:
+
+
 
 
 

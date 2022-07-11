@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY ./gst-rtsp-server ./gst-rtsp-server
 RUN cd /usr/src/app/gst-rtsp-server && chmod +x autogen.sh && ./autogen.sh && make && make install
 
-FROM balenalib/intel-nuc-debian as runtime
+FROM balenalib/intel-nuc-ubuntu as runtime
 RUN install_packages jq gstreamer1.0-plugins-bad gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools libgstreamer1.0-dev  libgstreamer1.0-0 libgstreamer-plugins-base1.0-dev libgstrtspserver-1.0-0 v4l-utils gstreamer1.0-omx
 
 COPY --from=buildstep /usr/src/app/gst-rtsp-server /usr/src/app/gst-rtsp-server
@@ -17,7 +17,7 @@ WORKDIR /usr/src/app
 #COPY --from=buildstep /usr/src/app/gst-rpicamsrc /usr/src/app/gst-rpicamsrc
 #RUN cd gst-rpicamsrc/src && \
 #    /bin/bash ../libtool   --mode=install /usr/bin/install -c   libgstrpicamsrc.la '/usr/lib/amd64-linux-gnueabihf/gstreamer-1.0' && \
-RUN ldconfig -n /usr/lib/amd64-linux-gnueabihf/gstreamer-1.0
+RUN ldconfig -n /usr/lib/x86_64-linux-gnu/gstreamer-1.0
 
 COPY *.sh ./
 

@@ -61,10 +61,11 @@ then
         if v4l2-ctl --list-formats-ext | grep -q "YUYV"
         then
             echo "${green}Starting capture of YUYV stream, 640x480, 15 fps...${reset}"
-            ./launch --gst-debug=3 "( v4l2src device=$a !  v4l2convert ! video/x-raw,width=640,height=480,framerate=15/1 ! omxh264enc target-bitrate=6000000 control-rate=variable ! video/x-h264,profile=baseline ! rtph264pay name=pay0 pt=96 )"
+            #./launch --gst-debug=3 "( v4l2src device=$a !  v4l2convert ! video/x-raw,width=640,height=480,framerate=15/1 ! omxh264enc target-bitrate=6000000 control-rate=variable ! video/x-h264,profile=baseline ! rtph264pay name=pay0 pt=96 )"
+            ./launch --gst-debug=3 "( v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=15/1 ! x264enc tune="zerolatency" byte-stream=true bitrate=2000 ! rtph264pay name=pay0 pt=96 "
         else
             echo -e "${green}Starting capture of MJPG stream, 640x480, 10 fps...${reset}"
-            ./launch --gst-debug=3 "( v4l2src device=$a ! image/jpeg,width=640,height=480,framerate=10/1 ! queue ! jpegdec ! omxh264enc target-bitrate=6000000 control-rate=variable ! video/x-h264,profile=baseline ! rtph264pay name=pay0 pt=96 )"
+            ./launch --gst-debug=3 "( v4l2src device=/dev/video0 ! image/jpeg,width=640,height=480,framerate=15/1 ! queue ! jpegdec ! x264enc tune="zerolatency" byte-stream=true bitrate=2000 ! rtph264pay name=pay0 pt=96 )"
         fi
     fi
 
