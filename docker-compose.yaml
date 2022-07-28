@@ -1,39 +1,37 @@
 version: '2'
 
+volumes:
+  models:
+
 services:
 
- # app:
- #   build: app
- #   network_mode: host
- #   ports:
- #     - 9000:9000
+  app:
+    build: app
+    network_mode: host
+    ports:
+      - 8555:8555
+      - 8888:8888
+    volumes:
+      - models:/usr/models
 
   model-server:
     image: openvino/model_server:latest
+    #build: vino
+    #command: /ovms/bin/ovms --model_name resnet --model_path /usr/models/model --shape auto --port 9000
+    command: /ovms/bin/ovms --config_path /usr/models/config.json --port 9000
+    privileged: true
     network_mode: host
-    environment:
-      - model_name="resnet"
-      - model_path="gs://ovms-public-eu/resnet50-binary"
-      - layout="NHWC:NCHW"
-      - port=9000
-      - rest_port=8000
     ports:
       - 9000:9000
-
-
+    volumes:
+      - models:/usr/models
+      
   video-capture:
     build: video-capture
     network_mode: host
     privileged: true
     labels:
           io.balena.features.balena-api: '1'
-
-  video-streaming:
-    build: video-streaming
-    network_mode: host
-    labels:
-      io.balena.features.supervisor-api: '1'
-
 
 
 

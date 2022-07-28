@@ -1,31 +1,25 @@
-#
-# Copyright (c) 2019-2020 Intel Corporation
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
-import sys
-sys.path.append("../../common/python")
 
-import grpc
+import cv2, io, time, imutils, datetime
+import traceback
+from imutils.video import VideoStream
 import numpy as np
-import classes
-from tensorflow import make_tensor_proto, make_ndarray, make_tensor_proto
-import datetime
-import argparse
-from tensorflow_serving.apis import predict_pb2
-from tensorflow_serving.apis import prediction_service_pb2_grpc
-import cv2
+from classes import imagenet_classes
+from ovmsclient import make_grpc_client
+
+#import grpc
+#from tensorflow import make_tensor_proto, make_ndarray
+#from tensorflow_serving.apis import predict_pb2
+#from tensorflow_serving.apis import prediction_service_pb2_grpc
+
+GRPC_URL = "localhost:9000"
+RTSP_URL = "rtsp://localhost:8554/server"
+BATCH_SIZE = 1
+MODEL_NAME = 'face-detection'
+WIDTH = 640
+HEIGHT = 480
+FPS = 30
+
 
 def crop_resize(img,cropx,cropy):
     y,x,c = img.shape
@@ -39,92 +33,109 @@ def crop_resize(img,cropx,cropy):
     starty = y//2-(cropy//2)
     return img[starty:starty+cropy,startx:startx+cropx,:]
 
-def getJpeg(path, size, rgb_image=0):
-    with open(path, mode='rb') as file:
-        content = file.read()
+def __draw_label(img, text, pos, bg_color):
+   font_face = cv2.FONT_HERSHEY_SIMPLEX
+   scale = 0.4
+   color = (0, 0, 0)
+   thickness = cv2.FILLED
+   margin = 2
+   txt_size = cv2.getTextSize(text, font_face, scale, thickness)
 
-    img = np.frombuffer(content, dtype=np.uint8)
-    img = cv2.imdecode(img, cv2.IMREAD_COLOR)  # BGR format
-    # retrived array has BGR format and 0-255 normalization
-    # format of data is HWC
-    # add image preprocessing if needed by the model
-    img = crop_resize(img, size, size)
+   end_x = pos[0] + txt_size[0][0] + margin
+   end_y = pos[1] - txt_size[0][1] - margin
+
+   cv2.rectangle(img, pos, (end_x, end_y), bg_color, thickness)
+   cv2.putText(img, text, pos, font_face, scale, color, 1, cv2.LINE_AA)
+
+def prep_image(img, size = 224):
+    img = cv2.resize(img, (WIDTH, HEIGHT))
     img = img.astype('float32')
-    #convert to RGB instead of BGR if required by model
-    if rgb_image:
-        img = img[:, :, [2, 1, 0]]
-    # switch from HWC to CHW and reshape to 1,3,size,size for model blob input requirements
-    img = img.transpose(2,0,1).reshape(1,3,size,size)
-    print(path, img.shape, "; data range:",np.amin(img),":",np.amax(img))
+    img = img[:, :, [2, 1, 0]]
+    img = img.transpose(2,0,1).reshape(1,3, HEIGHT, WIDTH)
+    #img = crop_resize(img, size, size)
+    #img = img.transpose(2,0,1).reshape(1,3,size,size)
     return img
 
-parser = argparse.ArgumentParser(description='Do requests to ie_serving and tf_serving using images in numpy format')
-parser.add_argument('--images_list', required=False, default='input_images.txt', help='path to a file with a list of labeled images')
-parser.add_argument('--grpc_address',required=False, default='localhost',  help='Specify url to grpc service. default:localhost')
-parser.add_argument('--grpc_port',required=False, default=9000, help='Specify port to grpc service. default: 9000')
-parser.add_argument('--input_name',required=False, default='input', help='Specify input tensor name. default: input')
-parser.add_argument('--output_name',required=False, default='resnet_v1_50/predictions/Reshape_1', help='Specify output name. default: resnet_v1_50/predictions/Reshape_1')
-parser.add_argument('--model_name', default='resnet', help='Define model name, must be same as is in service. default: resnet',
-                    dest='model_name')
-parser.add_argument('--size',required=False, default=224, type=int, help='The size of the image in the model')
-parser.add_argument('--rgb_image',required=False, default=0, type=int, help='Convert BGR channels to RGB channels in the input image')
-args = vars(parser.parse_args())
-
-channel = grpc.insecure_channel("{}:{}".format(args['grpc_address'],args['grpc_port']))
-stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
-input_images = args.get('images_list')
-size = args.get('size')
-with open(input_images) as f:
-    lines = f.readlines()
-print('Start processing:')
-print('\tModel name: {}'.format(args.get('model_name')))
-print('\tImages list file: {}'.format(args.get('images_list')))
-
-i = 0
-matched = 0
-processing_times = np.zeros((0),int)
-imgs = np.zeros((0,3,size, size), np.dtype('<f'))
-lbs = np.zeros((0), int)
-
-rgb_image = args.get('rgb_image')
-for line in lines:
-    path, label = line.strip().split(" ")
-    img = getJpeg(path, size, rgb_image)
-
+def do_face_detection(stub, img):
+   # output = client.predict({"0": img}, "resnet")
+    #result_index = np.argmax(output[0])
+    #predicted_class = imagenet_classes[result_index]
+    #return predicted_class
     request = predict_pb2.PredictRequest()
-    request.model_spec.name = args.get('model_name')
-    request.inputs[args['input_name']].CopyFrom(make_tensor_proto(img, shape=(img.shape)))
+    request.model_spec.name = MODEL_NAME
+    print("\nRequest shape", img.shape)
+    request.inputs["0"].CopyFrom(make_tensor_proto(img, shape=(img.shape)))
     start_time = datetime.datetime.now()
     result = stub.Predict(request, 10.0) # result includes a dictionary with all model outputs
     end_time = datetime.datetime.now()
-    if args['output_name'] not in result.outputs:
-        print("Invalid output name", args['output_name'])
-        print("Available outputs:")
-        for Y in result.outputs:
-            print(Y)
-        exit(1)
-    duration = (end_time - start_time).total_seconds() * 1000
-    processing_times = np.append(processing_times,np.array([int(duration)]))
-    output = make_ndarray(result.outputs[args['output_name']])
-    nu = np.array(output)
-    # for object classification models show imagenet class
-    print('Processing time: {:.2f} ms; speed {:.2f} fps'.format(round(duration, 2), round(1000 / duration, 2)))
-    offset = 0
-    if nu.shape[1] == 1001:
-        offset = 1 
-    ma = np.argmax(nu) - offset
-    mark_message = ""
-    if int(label) == ma:
-        matched += 1
-        mark_message = "; Correct match."
-    else:
-        mark_message = "; Incorrect match. Should be {} {}".format(label, classes.imagenet_classes[int(label)])
-    i += 1
-    print("\t",i, classes.imagenet_classes[ma],ma, mark_message)
 
-latency = np.average(processing_times)
-accuracy = matched/i
+    for thing in result.outputs: print(thing)
+    output = make_ndarray(result.outputs[86])
+    print("Response shape", output.shape)
 
-print("Overall accuracy=",accuracy*100,"%")
-print("Average latency=",latency,"ms")
+    for y in range(0,img.shape[0]):  # iterate over responses from all images in the batch
+        img_out = img[y,:,:,:]
 
+        print("image in batch item",y, ", output shape",img_out.shape)
+        img_out = img_out.transpose(1,2,0)
+        for i in range(0, 200*BATCH_SIZE-1):  # there is returned 200 detections for each image in the batch
+            detection = output[:,:,i,:]
+            # each detection has shape 1,1,7 where last dimension represent:
+            # image_id - ID of the image in the batch
+            # label - predicted class ID
+            # conf - confidence for the predicted class
+            # (x_min, y_min) - coordinates of the top left bounding box corner
+            #(x_max, y_max) - coordinates of the bottom right bounding box corner.
+            if detection[0,0,2] > 0.5 and int(detection[0,0,0]) == y:  # ignore detections for image_id != y and confidence <0.5
+                print("detection", i , detection)
+                x_min = int(detection[0,0,3] * WIDTH)
+                y_min = int(detection[0,0,4] * HEIGHT)
+                x_max = int(detection[0,0,5] * WIDTH)
+                y_max = int(detection[0,0,6] * HEIGHT)
+                # box coordinates are proportional to the image size
+                print("x_min", x_min)
+                print("y_min", y_min)
+                print("x_max", x_max)
+                print("y_max", y_max)
+
+                img_out = cv2.rectangle(cv2.UMat(img_out), tuple(x_min,y_min), tuple(x_max,y_max),(0,0,255),1)
+    
+    return img_out
+
+def resnet(client, img):
+    output = client.predict({"0": img}, "resnet")
+    result_index = np.argmax(output[0])
+    predicted_class = imagenet_classes[result_index]
+    return predicted_class
+
+def publish_result_stream(img):
+    return None
+
+
+if __name__ == "__main__":
+    grpc_client = make_grpc_client(GRPC_URL)
+    rtsp_stream = VideoStream(RTSP_URL).start()
+    print("* RTSP Stream succesfully opened")
+    print("* gRPC Socket succesfully opened")
+
+    while True:
+        try: 
+            frame = rtsp_stream.read()
+            try: 
+                if frame is not None:
+                    aux_frame = prep_image(frame)
+                    result = resnet(grpc_client, aux_frame)
+                    __draw_label(frame, str(result), (20,20), (255,0,0))
+                    print(result)
+                    out.write(frame)
+
+                else: 
+                   continue 
+                
+                time.sleep(1/30)
+            except Exception as e:
+                print("error while running inference", e)
+                print(traceback.format_exc())
+          
+        except Exception as e:
+            print("error while grabbing RTSP stream", e)

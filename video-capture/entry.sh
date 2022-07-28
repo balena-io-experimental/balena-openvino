@@ -70,5 +70,5 @@ then
 
 else
     echo "Custom pipeline found..."
-    ./launch --gst-debug=3 "( $GST_RTSP_PIPELINE )"
+    ./launch --gst-debug=2 "( $GST_RTSP_PIPELINE )"
 fi

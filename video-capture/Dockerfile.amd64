@@ -21,5 +21,5 @@ RUN ldconfig -n /usr/lib/x86_64-linux-gnu/gstreamer-1.0
 
 COPY *.sh ./
 
-CMD ["/bin/bash", "/usr/src/app/entry.sh"]
+CMD ["/bin/bash", "/usr/src/app/entry-amd64.sh"]
 
