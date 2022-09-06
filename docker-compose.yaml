@@ -12,19 +12,19 @@ services:
       - 8555:8555
       - 8888:8888
     volumes:
-      - models:/usr/models
+      - models:/usr/openvino
 
   model-server:
     image: openvino/model_server:latest
     #build: vino
-    #command: /ovms/bin/ovms --model_name resnet --model_path /usr/models/model --shape auto --port 9000
-    command: /ovms/bin/ovms --config_path /usr/models/config.json --port 9000
+    #command: /ovms/bin/ovms --model_name resnet --model_path /usr/openvino/model --shape auto --port 9000
+    command: /ovms/bin/ovms --config_path /usr/openvino/code/config.json --port 9000
     privileged: true
     network_mode: host
     ports:
       - 9000:9000
     volumes:
-      - models:/usr/models
+      - models:/usr/openvino
       
   video-capture:
     build: video-capture
