@@ -4,6 +4,10 @@
 
 OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes Jupyter Notebook, a popular environment for data science and machine learning applications, and some tools that allow you to interact with the [Intel OpenVino Model Zoo]().
 
+The way this is built allows you to enable two scenarios:
+* 
+* 
+
 Upon deploying this fleet, in jupyter, you'll see three notebooks, two examples, and a template file you can use to work on your model. 
 
 ### Hardware Requirements 
@@ -32,17 +36,28 @@ To stream frames from your webcam to an RTSP stream, add this to your `docker-co
 
 ```yaml
 video-capture:
-	build: video-capture
-	network_mode: host
-	privileged: true
-	labels:
-		io.balena.features.balena-api: '1'
+ build: video-capture 
+ network_mode: host 
+ privileged: true
+ labels:
+	 io.balena.features.balena-api: '1'
 ```
 
-
 #### Model Server
-![](https://docs.openvino.ai/latest/_images/serving-c.png)
-The [OpenVino Model Server (OVMS)](https://docs.openvino.ai/latest/ovms_what_is_openvino_model_server.html)  is the beating heart of this project. 
+The [OpenVino Model Server (OVMS)](https://docs.openvino.ai/latest/ovms_what_is_openvino_model_server.html)  is the beating heart of this project.  It obviously includes the [OpenVino Inference Engine]() but adds a few more features that make it particularly useful for our use-case.
+
+
+<img src="https://i.ibb.co/WDBrX5x/oie-transparent.png" alt="oie-transparent" border="0"> 
+
+The model server encapsulates all the packages needed for inference and model execution and **Device Plugins** to talk to the device you want to run inference on (can be CPU, GPU or AI Accelerator), and exposes either a gRPC or REST endpoint. This means you simply need to feed it the model input, in this case images, but could be anything your model is trained to accept, and wait for an inference result. The scheduling is done automatically, so it's able to accept and  respond to requests to multiple models at the same time.  
+
+The **Configuration Monitoring** and **Model Management** parts allow us to dynamically load new models and change the configuration file on the fly. 
+
+Both of these features, running multiple models at the same time, and the dynamic loading of models enable very powerful features for embedded and edge devices. Think of a robot that might need to do segmentation at some point, and then pull up an object detection model in another context. 
+ 
+
+The configuration format for the OpenVino Model server looks like this. You can find more information and details in the [official Intel documentation.](https://docs.openvino.ai/latest/ovms_docs_multiple_models.html)
+
 
 ```json
 {
@@ -63,16 +78,25 @@ The [OpenVino Model Server (OVMS)](https://docs.openvino.ai/latest/ovms_what_is_
 }
 ```
 
+For a model to be considered and loaded by the OpenVino model server, it needs to respect the following file-structure. 
+```
+base_path
+└── face-detection <-- model name
+    └── 1 <-- version number
+        ├── face-detection-retail-0004.bin <-- OpenVino IR model binary 
+        └── face-detection-retail-0004.xml <-- Model configuration
+```
 To add the OpenVino model server to your fleet you simply need to add this to your `docker-compose.yaml` file:
 ```yaml
 model-server:
-	image: openvino/model_server:latest
-	command: /ovms/bin/ovms --config_path /usr/openvino/code/config.json --port 9000
-	network_mode: host
-	ports:
-		- 9000:9000
-	volumes:
-		- models:/usr/openvino
+  image: openvino/model_server:latest
+  command: /ovms/bin/ovms --config_path /usr/openvino/code/config.json --port 9000
+  network_mode: host
+  ports:
+    - 9000:9000
+  volumes:
+    - models:/usr/openvino
+
 ```
 
 
@@ -91,5 +115,3 @@ Deploy this to a fleet, connect a USB webcam to your NUC, and look for the Jupyt
 
 ## How to extend
 You'll probably get bored of the two included examples quite quickly. 
-
-
