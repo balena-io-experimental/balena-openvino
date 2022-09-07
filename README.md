@@ -1,14 +1,13 @@
 
-
-# Balena OpenVino Developer Toolkit
+ # Balena OpenVino Developer Toolkit
 
 OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes Jupyter Notebook, a popular environment for data science and machine learning applications, and some tools that allow you to interact with the [Intel OpenVino Model Zoo]().
 
 The way this is built allows you to enable two scenarios:
-* 
-* 
+* Use as a standalone inference system, on x64 based machines 
+* Use as inference server, gathering data/images from multiple client (lower-power) devices
 
-Upon deploying this fleet, in jupyter, you'll see three notebooks, two examples, and a template file you can use to work on your model. 
+Upon deploying this fleet, in Jupyter, you'll see three notebooks, two examples, and a template file you can use to work on your model. 
 
 ### Hardware Requirements 
 
@@ -61,24 +60,24 @@ The configuration format for the OpenVino Model server looks like this. You can 
 
 ```json
 {
-	"model_config_list":[
-		{
-			"config":{
-				"name":"face-detection",
-				"base_path":"/usr/openvino/model/face-detection"
-			}
-		},
-		{
-			"config":{
-				"name":"resnet",
-				"base_path":"/usr/openvino/model/resnet"
-			}
-		}
-	]
+  "model_config_list": [
+    {
+      "config": {
+        "name": "face-detection",
+        "base_path": "/usr/openvino/model/face-detection"
+      }
+    },
+    {
+      "config": {
+        "name": "resnet",
+        "base_path": "/usr/openvino/model/resnet"
+      }
+    }
+  ]
 }
 ```
 
-For a model to be considered and loaded by the OpenVino model server, it needs to respect the following file-structure. 
+For a model to be considered and loaded by the OpenVino model server, it needs to respect the following file-structure:
 ```
 base_path
 └── face-detection <-- model name
@@ -106,6 +105,8 @@ As we've seen, OVMS needs a couple of assets to be able to run inference, one is
 Adding these files on a shared volume allows you to edit the OpenVino model server configuration files, download models, and convert them directly from the Jupyter. This means you can change things on the fly,  and since OVMS supports hot-reload, these changes will be immediately reflected in the model server,  allowing you to instantaneously run inference on your newly downloaded model. 
 
 #### Jupyter
+TODO
+
 
 
 ## How to use
@@ -113,5 +114,5 @@ This repository contains everything you need to get started with OpenVino on the
 
 Deploy this to a fleet, connect a USB webcam to your NUC, and look for the Jupyter Notebook URL on the dashboard.  Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. 
 
-## How to extend
-You'll probably get bored of the two included examples quite quickly. 
+## How to load models and extend
+TODO
