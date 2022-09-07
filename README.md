@@ -19,7 +19,7 @@ Upon deploying this fleet, in jupyter, you'll see three notebooks, two examples,
 
 It's based on Intel's [OpenVino Model Server](https://docs.openvino.ai/latest/ovms_what_is_openvino_model_server.html), a a high-performance system for serving machine learning models. The advantage of using a model server, is that the inference is self contained and independent. This leads to a couple of advantages we are going to talk about later. 
 
-<a href="https://ibb.co/34dCFZb"><img src="https://i.ibb.co/7jC1pmD/openvino2-drawio.png" alt="openvino2-drawio" border="0"></a>
+<img src="https://i.ibb.co/Chd7KM6/structure.png" alt="structure" border="0">
 
 Let's go into a bit of detail with every component of this architecture. 
 
@@ -40,7 +40,7 @@ video-capture:
  network_mode: host 
  privileged: true
  labels:
-	 io.balena.features.balena-api: '1'
+  io.balena.features.balena-api: '1'
 ```
 
 #### Model Server
