@@ -1,11 +1,8 @@
 
  # Balena OpenVino Developer Toolkit
 
-OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes Jupyter Notebook, a popular environment for data science and machine learning applications, and some tools that allow you to interact with the [Intel OpenVino Model Zoo]().
+OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes [Jupyter Notebook](https://jupyter.org/), a popular environment for data science and machine learning applications, and some tools that allow you to interact with the [Intel OpenVino Model Zoo]().
 
-The way this is built allows you to enable two scenarios:
-* Use as a standalone inference system, on x64 based machines 
-* Use as inference server, gathering data/images from multiple client (lower-power) devices
 
 Upon deploying this fleet, in Jupyter, you'll see three notebooks, two examples, and a template file you can use to work on your model. 
 
@@ -16,7 +13,11 @@ Upon deploying this fleet, in Jupyter, you'll see three notebooks, two examples,
 
 ## Architecture 
 
-It's based on Intel's [OpenVino Model Server](https://docs.openvino.ai/latest/ovms_what_is_openvino_model_server.html), a a high-performance system for serving machine learning models. The advantage of using a model server, is that the inference is self contained and independent. This leads to a couple of advantages we are going to talk about later. 
+It's based on Intel's [OpenVino Model Server](https://docs.openvino.ai/latest/ovms_what_is_openvino_model_server.html), a a high-performance system for serving machine learning models. The advantage of using a model server, is that the inference is self contained and independent. 
+
+This enables two scenarios:
+* Use as a standalone inference system, on x64 based machines 
+* Use as inference server, gathering data/images from multiple lower-power client devices
 
 <img src="https://i.ibb.co/Chd7KM6/structure.png" alt="structure" border="0">
 
