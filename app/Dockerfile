@@ -15,8 +15,8 @@ RUN wget https://raw.githubusercontent.com/openvinotoolkit/model_server/releases
 COPY ./config.json /usr/openvino/code/config.json
 
 COPY ./notebooks/face_detection.ipynb /usr/openvino/code/notebooks/face_detection.ipynb
-COPY ./notebooks/resnet.ipynb /usr/openvino/code/notebooks/resnet.ipynb
-COPY ./notebooks/yolov5.ipynb /usr/openvino/code/notebooks/yolov5.ipynb
+COPY ./notebooks/object_detection.ipynb /usr/openvino/code/notebooks/object_detection.ipynb
+COPY ./notebooks/template.ipynb /usr/openvino/code/notebooks/template.ipynb
 
 
 RUN pip3 install --upgrade pip
@@ -38,9 +38,9 @@ RUN  wget -P resnet/1 https://storage.openvinotoolkit.org/repositories/open_mode
 RUN  wget -P face-detection/1 https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/2/face-detection-retail-0004/FP32/face-detection-retail-0004.bin
 RUN  wget -P face-detection/1 https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/2/face-detection-retail-0004/FP32/face-detection-retail-0004.xml
 
-COPY  ./yolov5n/yolov5n.bin  /usr/openvino/model/yolov5n/1/yolov5n.bin
-COPY  ./yolov5n/yolov5n.mapping /usr/openvino/model/yolov5n/1/yolov5n.mapping
-COPY  ./yolov5n/yolov5n.xml /usr/openvino/model/yolov5n/1/yolov5n.xml 
-COPY  ./yolov5n/yolov5n.yaml  /usr/openvino/model/yolov5n/1/yolov5n.yaml
+#COPY  ./yolov5n/yolov5n.bin  /usr/openvino/model/yolov5n/1/yolov5n.bin
+#COPY  ./yolov5n/yolov5n.mapping /usr/openvino/model/yolov5n/1/yolov5n.mapping
+#COPY  ./yolov5n/yolov5n.xml /usr/openvino/model/yolov5n/1/yolov5n.xml 
+#COPY  ./yolov5n/yolov5n.yaml  /usr/openvino/model/yolov5n/1/yolov5n.yaml
 
-CMD jupyter lab /usr/openvino/ --allow-root --ip 0.0.0.0
+CMD jupyter lab /usr/openvino/ --allow-root --ip 0.0.0.0 --NotebookApp.token='' --NotebookApp.password='balenaovms'
