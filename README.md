@@ -1,8 +1,9 @@
 
  # Balena OpenVino Developer Toolkit
 
-OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes [Jupyter Notebook](https://jupyter.org/), a popular environment for data science and machine learning applications, and some tools that allow you to interact with the [Intel OpenVino Model Zoo]().
+OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes [Jupyter Notebook](https://jupyter.org/), a popular environment for data science and machine learning applications, and some tools that allow you to interact with the [Intel OpenVino Model Zoo](https://github.com/IntelAI/models).
 
+This is meant to be both a demo of OpenVino running on balena, containing two models, one for [object recognition](https://docs.openvino.ai/latest/omz_models_model_resnet_50_tf.html), and one for [face detection](https://docs.openvino.ai/latest/omz_models_model_face_detection_retail_0044.html), but also a playground where you can [download, convert](https://docs.openvino.ai/latest/omz_tools_downloader.html) and run your models directly on an edge device. 
 
 Upon deploying this fleet, in Jupyter, you'll see three notebooks, two examples, and a template file you can use to work on your model. 
 
@@ -114,6 +115,8 @@ TODO
 This repository contains everything you need to get started with OpenVino on the edge. The `docker-compose.yaml`file comes pre-configured with, OVMS, a local RTSP streamer for USB webcams, Jupyter Notebook, and two example models, one for object detection and one for face recognition. 
 
 Deploy this to a fleet, connect a USB webcam to your NUC, and look for the Jupyter Notebook URL on the dashboard.  Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. 
+
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/cristidragomir97/openvino-balena/)
 
 ## How to load models and extend
 TODO
