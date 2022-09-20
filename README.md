@@ -112,9 +112,29 @@ TODO
 ## How to use
 This repository contains everything you need to get started with OpenVino on the edge. The `docker-compose.yaml`file comes pre-configured with, OVMS, a local RTSP streamer for USB webcams, Jupyter Notebook, and two example models, one for object detection and one for face recognition. 
 
-Deploy this to a fleet, connect a USB webcam to your NUC, and look for the Jupyter Notebook URL on the dashboard.  Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. 
-
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/cristidragomir97/openvino-balena/)
+
+Before you start, make sure a webcam is connected to your device. Deploy this to a fleet, and navigate to http://<YOUR_DEVICE_IP>:8888. You should be greeted by the Jupyter environment.
+
+Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. You can see the file tree on the sidebar on the left.
+
+
+![](https://i.ibb.co/sCzhFKS/Screenshot-2022-09-20-at-18-42-27.png)
+
+To run the cells in the notebook you can either use the notebook's toolbar:
+
+
+![](https://i.ibb.co/C8C4xyX/toolbar.png)
+
+Or go to the "Kernel" tab in the menubar, and select "Restart Kernel and Run all Cells".
+
+![](https://i.ibb.co/25z1Dry/Screenshot-2022-09-20-at-18-42-32.png)
+
+Now scroll down to the end of the page and you should see a live camera feed with your model running. 
+
+
+
+
 
 ## How to load models and extend
 TODO
