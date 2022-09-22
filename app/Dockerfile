@@ -43,4 +43,4 @@ RUN  wget -P face-detection/1 https://storage.openvinotoolkit.org/repositories/o
 #COPY  ./yolov5n/yolov5n.xml /usr/openvino/model/yolov5n/1/yolov5n.xml 
 #COPY  ./yolov5n/yolov5n.yaml  /usr/openvino/model/yolov5n/1/yolov5n.yaml
 
-CMD jupyter lab /usr/openvino/ --allow-root --ip 0.0.0.0 --NotebookApp.token='' --NotebookApp.password='balenaovms'
+CMD jupyter lab /usr/openvino/ --allow-root --ip 0.0.0.0 --NotebookApp.token='' 
