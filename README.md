@@ -105,8 +105,7 @@ As we've seen, OVMS needs a couple of assets to be able to run inference, one is
 Adding these files on a shared volume allows you to edit the OpenVino model server configuration files, download models, and convert them directly from the Jupyter. This means you can change things on the fly,  and since OVMS supports hot-reload, these changes will be immediately reflected in the model server,  allowing you to instantaneously run inference on your newly downloaded model. 
 
 #### Jupyter
-TODO
-
+Jupyter is an interactive web based development environment for Python. It is very popular in data science applications. 
 
 
 ## How to use
@@ -118,11 +117,9 @@ Before you start, make sure a webcam is connected to your device. Deploy this to
 
 Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. You can see the file tree on the sidebar on the left.
 
-
 ![](https://i.ibb.co/sCzhFKS/Screenshot-2022-09-20-at-18-42-27.png)
 
 To run the cells in the notebook you can either use the notebook's toolbar:
-
 
 ![](https://i.ibb.co/C8C4xyX/toolbar.png)
 
@@ -133,8 +130,30 @@ Or go to the "Kernel" tab in the menubar, and select "Restart Kernel and Run all
 Now scroll down to the end of the page and you should see a live camera feed with your model running. 
 
 
+## How to import pre-trained modelsfrom OpenVino Model Zoo
+1. Browse [OpenVino Model Zoo](https://docs.openvino.ai/latest/omz_models_group_public.html). Let's say we want to try and use `yolo-v3-tf` in our solution.
+2. Open an a terminal window inside Jupyter by opening the command palette (Command/Ctrl + Shift + C) and selecting `New Terminal` and navigate to ` /usr/openvino/model/`
+3. Use `omz_downloader` to download and convert the model. 
+* `omz_downloader --name yolo-v3-tf`
+* `omz_converter --name yolo-v3-tf`
+4. In order to use a model, you'll need three files, the model binary (.bin), the model manifest (.xml) and the layer mapping file (.mapping). Move the files that `omz_converter` created to the correct folder `/usr/openvino/model/<MODEL_NAME>/<MODEL_VERSION>`
+* `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.xml /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.xml` 
+* `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.bin /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.bin` 
+* `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.mapping /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.mapping` 
+5. Add the model to the `config.json` file
+```json
+ {
+         "config":{
+            "name":"yolo-v3-tf",
+            "base_path":"/usr/openvino/model/yolo-v3-tf"
+         }
+      },
+```
+6. The OpenVino model server service will immediatly see the changes and begin serving your model. 
+
+7. Check the `template.ipynb`file for an example of how to do inference on your newly imported model
 
 
 
-## How to load models and extend
-TODO
+
+
