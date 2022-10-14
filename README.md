@@ -105,7 +105,7 @@ As we've seen, OVMS needs a couple of assets to be able to run inference, one is
 Adding these files on a shared volume allows you to edit the OpenVino model server configuration files, download models, and convert them directly from the Jupyter. This means you can change things on the fly,  and since OVMS supports hot-reload, these changes will be immediately reflected in the model server,  allowing you to instantaneously run inference on your newly downloaded model. 
 
 #### Jupyter
-Jupyter is an interactive web based development environment for Python. It is very popular in data science applications. 
+Jupyter is an interactive web based development environment for Python. It is very popular in data science applications. Jupyter offers the ability to run interactive Python Notebooks. These are basically ordered lists of Markdown and Python cells, which are run one by one by the same python instance (Called a Kernel). Variables and methods that were defined in one cell are accessible in the cells after it. Markdown is there so that explainations and context can be added. Jupyter can display the output of each of these cells just like printing to `stdout`, but also feature interactive charts, images, video and other rich media. Some extra features which are useful in our case are a filesystem browser, data explorer and integrated terminal. Apart from these Jupyter supports countless plugins. 
 
 
 ## How to use
@@ -113,7 +113,7 @@ This repository contains everything you need to get started with OpenVino on the
 
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/cristidragomir97/openvino-balena/)
 
-Before you start, make sure a webcam is connected to your device. Deploy this to a fleet, and navigate to http://<YOUR_DEVICE_IP>:8888. You should be greeted by the Jupyter environment.
+Before you start, make sure a webcam is connected to your device. Deploy this to a fleet, and navigate to `http://<YOUR_DEVICE_IP>:8888`. You should be greeted by the Jupyter environment.
 
 Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. You can see the file tree on the sidebar on the left.
 
@@ -130,7 +130,7 @@ Or go to the "Kernel" tab in the menubar, and select "Restart Kernel and Run all
 Now scroll down to the end of the page and you should see a live camera feed with your model running. 
 
 
-## How to import pre-trained modelsfrom OpenVino Model Zoo
+## How to import pre-trained models from OpenVino Model Zoo
 1. Browse [OpenVino Model Zoo](https://docs.openvino.ai/latest/omz_models_group_public.html). Let's say we want to try and use `yolo-v3-tf` in our solution.
 2. Open an a terminal window inside Jupyter by opening the command palette (Command/Ctrl + Shift + C) and selecting `New Terminal` and navigate to ` /usr/openvino/model/`
 3. Use `omz_downloader` to download and convert the model. 
