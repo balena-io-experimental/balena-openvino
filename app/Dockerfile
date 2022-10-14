@@ -1,12 +1,9 @@
 FROM balenalib/intel-nuc-ubuntu:focal
 
 RUN install_packages wget libffi-dev gfortran git cmake build-essential \
-    python3 python3-pip python3-dev python3-dev python3-numpy  \
-    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-ugly gstreamer1.0-rtsp  
+    python3 python3-pip python3-dev python3-dev  \
+    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-ugly gstreamer1.0-rtsp
 
-WORKDIR /usr/openvino
-##RUN  wget -P model/1 https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/2/resnet50-binary-0001/FP32-INT1/resnet50-binary-0001.bin
-##RUN  wget -P model/1 https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/2/resnet50-binary-0001/FP32-INT1/resnet50-binary-0001.xml
 
 WORKDIR /usr/openvino
 RUN mkdir -p /usr/openvino/code/notebooks
@@ -20,6 +17,8 @@ COPY ./notebooks/template.ipynb /usr/openvino/code/notebooks/template.ipynb
 
 
 RUN pip3 install --upgrade pip
+#RUN pip3 install ovmsclient imutils setuptools jupyterlab  cffi imutils ovmsclient ipywidgets opencv_jupyter_ui openvino-dev tensorflow-serving-api
+
 RUN pip3 install ovmsclient imutils setuptools cffi jupyterlab matplotlib pandas opencv-python ipywidgets opencv_jupyter_ui openvino-dev tensorflow-serving-api
 
 WORKDIR /usr/openvino/model
