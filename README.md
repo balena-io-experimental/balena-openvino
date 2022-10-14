@@ -105,7 +105,11 @@ As we've seen, OVMS needs a couple of assets to be able to run inference, one is
 Adding these files on a shared volume allows you to edit the OpenVino model server configuration files, download models, and convert them directly from the Jupyter. This means you can change things on the fly,  and since OVMS supports hot-reload, these changes will be immediately reflected in the model server,  allowing you to instantaneously run inference on your newly downloaded model. 
 
 #### Jupyter
-Jupyter is an interactive web based development environment for Python. It is very popular in data science applications. Jupyter offers the ability to run interactive Python Notebooks. These are basically ordered lists of Markdown and Python cells, which are run one by one by the same python instance (Called a Kernel). Variables and methods that were defined in one cell are accessible in the cells after it. Markdown is there so that explainations and context can be added. Jupyter can display the output of each of these cells just like printing to `stdout`, but also feature interactive charts, images, video and other rich media. Some extra features which are useful in our case are a filesystem browser, data explorer and integrated terminal. Apart from these Jupyter supports countless plugins. 
+Jupyter is an interactive web based development environment for Python. It is very popular in data science applications. Jupyter offers the ability to run interactive Python Notebooks. 
+
+These are basically ordered lists of Markdown and Python cells, which are run one by one by the same python instance (Called a Kernel). Variables and methods that were defined in one cell are accessible in the cells after it. Markdown is there so that explainations and context can be added. 
+
+Jupyter can display the output of each of these cells just like printing to a terminal, but also feature interactive charts, images, video and other rich media. Some extra features which are useful in our case are a filesystem browser, data explorer and integrated terminal. Apart from these Jupyter supports countless plugins. 
 
 
 ## How to use
