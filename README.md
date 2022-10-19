@@ -146,12 +146,29 @@ Now scroll down to the end of the page and you should see a live camera feed wit
 * `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.mapping /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.mapping` 
 5. Add the model to the `config.json` file
 ```json
- {
-         "config":{
-            "name":"yolo-v3-tf",
-            "base_path":"/usr/openvino/model/yolo-v3-tf"
-         }
-      },
+{
+  "model_config_list": [
+    {
+      "config": {
+        "name": "face-detection",
+        "base_path": "/usr/openvino/model/face-detection"
+      }
+    },
+    {
+      "config": {
+        "name": "resnet",
+        "base_path": "/usr/openvino/model/resnet"
+      }
+    },
+    {
+      "config": {
+        "name": "yolo-v3-tf",
+        "base_path": "/usr/openvino/model/yolo-v3-tf"
+      }
+    }
+  ]
+}
+    
 ```
 6. The OpenVino model server service will immediatly see the changes and begin serving your model. 
 
