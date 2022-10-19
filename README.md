@@ -131,7 +131,9 @@ Or go to the "Kernel" tab in the menubar, and select "Restart Kernel and Run all
 
 ![](https://i.ibb.co/25z1Dry/Screenshot-2022-09-20-at-18-42-32.png)
 
-Now scroll down to the end of the page and you should see a live camera feed with your model running. 
+Now scroll down to the end of the page and you should see a live camera feed with your model running.
+![](https://i.ibb.co/xjHF6xz/Screenshot-2022-10-17-at-18-27-08.png)
+
 
 
 ## How to import pre-trained models from OpenVino Model Zoo
@@ -168,7 +170,6 @@ Now scroll down to the end of the page and you should see a live camera feed wit
     }
   ]
 }
-    
 ```
 6. The OpenVino model server service will immediatly see the changes and begin serving your model. 
 
