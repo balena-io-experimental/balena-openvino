@@ -155,7 +155,7 @@ Now scroll down to the end of the page and you should see a live camera feed wit
 ```
 6. The OpenVino model server service will immediatly see the changes and begin serving your model. 
 
-7. Check the `template.ipynb`file for an example of how to do inference on your newly imported model
+7. Check the [template.ipynb](https://github.com/cristidragomir97/openvino-balena/blob/master/app/notebooks/template.ipynb) file for an example of how to do inference on your newly imported model. You can find this file along with the other examples in the `code/notebooks` folder. 
 
 
 
