@@ -121,17 +121,19 @@ Before you start, make sure a webcam is connected to your device. Deploy this to
 
 Once logged in into Jupyter, you'll be ready to run the included demos, or add your own. You can see the file tree on the sidebar on the left.
 
-![](https://i.ibb.co/sCzhFKS/Screenshot-2022-09-20-at-18-42-27.png)
+ <img src="https://i.ibb.co/sCzhFKS/Screenshot-2022-09-20-at-18-42-27.png" width="320"/>
 
 To run the cells in the notebook you can either use the notebook's toolbar:
 
-![](https://i.ibb.co/C8C4xyX/toolbar.png)
+![](https://i.ibb.co/C8C4xyX/toolbar.png")
 
 Or go to the "Kernel" tab in the menubar, and select "Restart Kernel and Run all Cells".
 
-![](https://i.ibb.co/25z1Dry/Screenshot-2022-09-20-at-18-42-32.png)
+ <img src="https://i.ibb.co/25z1Dry/Screenshot-2022-09-20-at-18-42-32.png" width="320"/>
 
-Now scroll down to the end of the page and you should see a live camera feed with your model running. 
+Now scroll down to the end of the page and you should see a live camera feed with your model running.
+ <img src="https://i.ibb.co/xjHF6xz/Screenshot-2022-10-17-at-18-27-08.png" width="320"/>
+
 
 
 ## How to import pre-trained models from OpenVino Model Zoo
@@ -148,12 +150,28 @@ Now scroll down to the end of the page and you should see a live camera feed wit
   
 1. Add the model to the `config.json` file
 ```json
- {
-         "config":{
-            "name":"yolo-v3-tf",
-            "base_path":"/usr/openvino/model/yolo-v3-tf"
-         }
-      },
+{
+  "model_config_list": [
+    {
+      "config": {
+        "name": "face-detection",
+        "base_path": "/usr/openvino/model/face-detection"
+      }
+    },
+    {
+      "config": {
+        "name": "resnet",
+        "base_path": "/usr/openvino/model/resnet"
+      }
+    },
+    {
+      "config": {
+        "name": "yolo-v3-tf",
+        "base_path": "/usr/openvino/model/yolo-v3-tf"
+      }
+    }
+  ]
+}
 ```
 6. The OpenVino model server service will immediatly see the changes and begin serving your model. 
 
