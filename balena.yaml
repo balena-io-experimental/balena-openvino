@@ -1,13 +1,13 @@
-name: openvino-balena
+name: balena-openvino
 description: >-
    Get started with OpenVINO™. Develop, tweak and test models direclty on edge devices.
-version: 0.0.1
+version: 0.0.3
 type: sw.application
 assets:
   repository:
     type: blob.asset
     data:
-      url: 'https://github.com/cristidragomir97/openvino-balena'
+      url: 'https://github.com/cristidragomir97/balena-openvino'
 data:
   defaultDeviceType: intel-nuc
   supportedDeviceTypes:

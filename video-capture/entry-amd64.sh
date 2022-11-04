@@ -58,7 +58,7 @@ then
         echo "Found device ${a}."
       
         echo -e "${green}Starting capture of MJPG stream, 640x480, 10 fps...${reset}"
-        ./launch --gst-debug=3 "( v4l2src device=/dev/video0 !  image/jpeg,width=640,height=480,framerate=30/1 ! jpegparse ! rtpjpegpay name=pay0 pt=96 )"
+        ./launch --gst-debug=1 "( v4l2src device=/dev/video0 !  image/jpeg,width=640,height=480,framerate=30/1 ! jpegparse ! rtpjpegpay name=pay0 pt=96 )"
 
     fi
 

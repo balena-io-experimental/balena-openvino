@@ -140,11 +140,13 @@ Now scroll down to the end of the page and you should see a live camera feed wit
 3. Use `omz_downloader` to download and convert the model. 
 * `omz_downloader --name yolo-v3-tf`
 * `omz_converter --name yolo-v3-tf`
-4. In order to use a model, you'll need three files, the model binary (.bin), the model manifest (.xml) and the layer mapping file (.mapping). Move the files that `omz_converter` created to the correct folder `/usr/openvino/model/<MODEL_NAME>/<MODEL_VERSION>`
+4. In order to use a model, you'll need three files, the model binary (.bin), the model manifest (.xml) and the layer mapping file (.mapping). Move the files that `omz_converter` created to the correct folder `/usr/openvino/model/<MODEL_NAME>/<MODEL_VERSION>` 
+* `mkdir -p /usr/openvino/model/yolo-v3-tf/1`
 * `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.xml /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.xml` 
 * `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.bin /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.bin` 
 * `mv /usr/openvino/model/public/yolo-v3-tf/FP32/yolo-v3-tf.mapping /usr/openvino/model/yolo-v3-tf/1/yolo-v3-tf.mapping` 
-5. Add the model to the `config.json` file
+  
+1. Add the model to the `config.json` file
 ```json
  {
          "config":{
@@ -155,7 +157,7 @@ Now scroll down to the end of the page and you should see a live camera feed wit
 ```
 6. The OpenVino model server service will immediatly see the changes and begin serving your model. 
 
-7. Check the `template.ipynb`file for an example of how to do inference on your newly imported model
+7. Check the `template.ipynb`file for an example of how to do inference on your newly imported model. Please note that this file serves as a rough outline of how to interact with an OpenVino model, and is not going to work out of the box without some tweaking and knowledge of the model you are going to use. 
 
 
 
