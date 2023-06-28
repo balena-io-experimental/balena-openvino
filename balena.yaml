@@ -1,14 +1,28 @@
 name: balena-openvino
-description: >-
-   Get started with OpenVINO™. Develop, tweak and test models direclty on edge devices.
-version: 0.0.3
 type: sw.application
+description: >-
+   Get started with OpenVINO™. Develop, tweak and test models direclty on edge devices. 
+post-provisioning: >-
+   OpenVINO™ is an open-source toolkit for optimizing and deploying AI inference. This project is built around this toolkit, and is aimed to reduce friction in developing AI models on the 
+   edge. The aim of this project is to get you started with OpenVINO™ , and allow you to develop, tweak and test models on edge devices. To this end, it includes Jupyter Notebook, a popular 
+   environment for data science and machine learning applications, and some tools that allow you to interact with the Intel OpenVino Model Zoo.
+
+   This is meant to be both a demo of OpenVino running on balena, containing two models, one for object recognition, and one for face detection, but also a playground where you can download, 
+   convert and run your models directly on an edge device. Upon deploying this fleet, in Jupyter, you'll see three notebooks, the two examples, and a template file you can use to work on your 
+   model.
+version: 0.0.3
 assets:
   repository:
     type: blob.asset
     data:
       url: 'https://github.com/cristidragomir97/balena-openvino'
+  logo:
+    type: blob.asset
+    data:
+      url: 'https://raw.githubusercontent.com/balena-labs-projects/balena-openvino/master/logo.png'
 data:
   defaultDeviceType: intel-nuc
   supportedDeviceTypes:
     - intel-nuc
+    - generic-amd64
+    - genericx86-64-ext
